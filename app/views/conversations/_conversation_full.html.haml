@@ -1,0 +1,33 @@
+- recipient = nil
+- conversation.recipients.each do |recp|
+  - if recp != current_user
+    - recipient = recp
+.row
+  .col-md-3
+    %h3
+      #{conversation.subject}
+    %hr
+  .col-md-9
+    - unless @box.eql? 'trash'
+      = button_to 'Delete',  conversation_path(conversation), method: :delete, data: {confirm: 'Are you sure?' }, class: 'btn btn-danger'
+
+
+.row
+  .col-md-5
+    - @receipts.each do |receipt|
+      = render :partial => '/messages/message', :locals => { message: receipt.message }
+      %hr
+  .col-md-6{ id: 'reply-box' }
+    - unless @box.eql?'trash'
+      %br
+      = simple_form_for :message, {url: conversation_path(conversation), :method => :put, :class => "form-horizontal" } do |f|
+        / - if @receipt and @receipt.errors.any?
+        /   %h2
+        /     = pluralize(@receipt.errors.count, "error")
+        /     prohibited this message from being sent:
+        /   %ul
+        /     - @receipt.errors.full_messages.each do |msg|
+        /       %li
+        /         = msg
+        = f.input :body, as: :ckeditor
+        = f.button :submit, 'Reply', class: 'btn btn-primary' 

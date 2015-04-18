@@ -1,0 +1,67 @@
+.row
+  .col-md-offset-5
+    = will_paginate @topics, renderer: BootstrapPagination::Rails
+.row
+  .text-right
+    = link_to 'New Topic', new_topic_path, class: 'btn btn-primary'
+  - @topics.each do |topic|
+    .row
+      .col-md-8.col-md-offset-2
+        .panel.panel-default
+          .panel-heading
+            .panel-title
+              .text-left
+                %span.badge.badge-primary
+                  #{topic.cached_weighted_score}
+                #{topic.title}
+          .panel-body
+            .h5
+              .well
+                = topic.text_field.html_safe
+                .text-right
+                  %h5
+                    #{'-'} proposed by #{link_to topic.user.name, user_profile_path(topic.user)} on #{topic.created_at.strftime("%m/%d/%Y")}
+              .btn-group.btn-group-lg{:role => 'group'}
+                = link_to upvote_path(topic.id), class: 'btn btn-success', role: 'button' do
+                  %i.glyphicon.glyphicon-chevron-up{style: 'color:white'}
+                = link_to downvote_path(topic.id), class: 'btn btn-danger', role: 'button' do
+                  %i.glyphicon.glyphicon-chevron-down{style: 'color:white'}
+              .btn-group.btn-group{:role => 'group'}
+                %button.btn.btn-info{type: 'button'} Forum
+                %button.btn.btn-warning{type: 'button'} Report
+                %button.btn.btn-danger{type: 'button'} Request Deletion
+            / .row
+            /   .col-md-9
+            /     .row
+            /       .col-md-3
+            /         .row
+            /           .container
+            /             %h4  
+            /               = link_to upvote_path(topic.id) do
+            /                 %i.glyphicon.glyphicon-chevron-up
+            /         .row
+            /           .container
+            /             %span.badge.badge-primary
+            /               %h5
+            /                 #{topic.cached_weighted_score}
+            /         .row
+            /           .container
+            /             %h4
+            /               = link_to downvote_path(topic.id) do
+            /                 %i.glyphicon.glyphicon-chevron-down
+#vote.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "myModalLabel", :role => "dialog", :tabindex => "-1"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
+          %span{"aria-hidden" => "true"} &times;
+        %h4#modalTitle.modal-title Vote on 
+      .modal-body
+        .btn-group.btn-group-lg{:role => 'group'}
+          = simple_form_for :upvote, url: modal_upvote_path, method: :post do |f|
+            = f.hidden_field :id, id: 'upId', value: 0
+            = f.button :submit, class: 'btn btn-success'
+          = simple_form_for :downvote, url: modal_downvote_path, method: :post do |f|
+            = f.hidden_field :id, id: 'downId', value: 0
+            = f.button :submit, class: 'btn btn-success'
+

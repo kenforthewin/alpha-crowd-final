@@ -1,0 +1,29 @@
+%header.navbar
+  %nav.navbar.navbar-default.navbar-fixed-top
+    .container
+      .navbar-header
+        %button.navbar-toggle{ :type => "button", :"data-toggle" => "collapse", :"data-target" => ".navbar-collapse" }
+          %span.sr-only Toggle navigation
+          %span.icon-bar
+          %span.icon-bar
+          %span.icon-bar
+      .navbar-collapse.collapse
+        %ul.nav.navbar-nav.navbar-left
+          %li
+            = link_to '(ALPHA) CROWD', root_path, html_options = {:class =>'navbar-brand'}
+          -if user_signed_in?
+            %li
+              = link_to 'New Topic', new_topic_path
+        %ul.nav.navbar-nav.navbar-right
+          - if user_signed_in?
+            %li
+              = link_to 'Messages', conversations_path(page: 1, box: 'index')
+            %li
+              = link_to "Profile", user_profile_path(current_user.id)
+            %li
+              = link_to 'Sign out', destroy_user_session_path, method: :delete
+          -else
+            %li
+              = link_to 'Sign up', new_user_registration_path
+            %li
+              = link_to 'Sign in', new_user_session_path

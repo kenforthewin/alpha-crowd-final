@@ -1,0 +1,84 @@
+.panel.panel-default
+  .panel-body
+    .row
+      .col-md-4
+        .well
+          .text-center
+            = image_tag @user.avatar.url(:medium), class: 'img-circle'
+          %h2
+            .text-center
+              = @user.full_name
+          %hr
+          .row
+            .col-md-6
+              %h4
+                .text-right
+                  Joined:
+              %h4
+                .text-right
+                  Last login:
+              %h4
+                .text-right
+                  Total topics:
+              %h4
+                .text-right
+                  Total posts:
+                
+            .col-md-6
+              %h4
+                .text-left
+                  = @user.created_at.strftime("%m/%d/%Y")
+              - if !@user.current_sign_in_at.nil?
+                %h4
+                  .text-left
+                    = @user.current_sign_in_at.strftime("%m/%d/%Y")
+              %h4
+                .text-left
+                  = @user.topics.count
+      .col-md-8
+        .well
+          .text-center
+            %h3 Topics
+          %table.table.table-striped
+            %thead
+              %tr
+                %th Title
+                -#%th Description
+                %th Date
+                %th Status
+            %tbody
+              - @topics.each do |topic|
+                %tr
+                  %th 
+                    = topic.title
+                  -#%th #{truncate(topic.text_field, length: 30)}...
+                  %th 
+                    = topic.created_at.strftime("%m/%d/%Y")
+                  %th
+                    pending review
+        .well
+          .text-center
+            %h3 Posts
+          %table.table.table-striped
+            %thead
+              %tr
+                %th Forum
+                %th Topic
+                %th Content
+                %th Date
+              %tbody
+                - @posts.each do |post|
+                  %tr
+                    %th
+                      = post.forum_topic.forum.name
+                    %th
+                      = post.forum_topic.name
+                    %th
+                      #{truncate(post.text, length: 30)}
+                    %th
+                      = post.created_at.strftime("%m/%d/%Y")
+        .well
+          - if @user != current_user
+            = link_to 'Send a message', new_message_path(receiver: @user.id)
+
+

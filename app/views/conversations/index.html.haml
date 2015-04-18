@@ -1,0 +1,30 @@
+%ul.nav.nav-pills
+  %li{role: 'presentation', class: "#{@box == 'inbox' ? "active" : ""}"}
+    = link_to conversations_path(:box => 'inbox') do
+      Inbox
+      %span.badge #{@mailbox.inbox.count}
+  %li{role: 'presentation', class: "#{@box == 'sentbox' ? "active" : ""}"}
+    = link_to conversations_path(:box => 'sentbox') do
+      Sent
+  %li{role: 'presentation', class: "#{@box == 'trash' ? "active" : ""}"}
+    = link_to conversations_path(:box => 'trash') do
+      Trash
+- recipient = nil
+%table.table.table-striped
+  %thead
+    %tr
+      %th Title
+      %th Message
+      %th Sender
+  %tbody  
+    - @conversations.each do |conv|
+      -conv.recipients.each do |recp|
+        - if recp != @user
+          - recipient = recp
+      %tr
+        %td
+          = link_to (truncate(conv.subject, :length => 55)), conversation_path(conv.id,:box => @box,:page => 1)
+        %td
+          = link_to (truncate(conv.receipts.first.message.body, :length => 55)), conversation_path(conv.id,:box => @box,:page => 1)
+        %td
+          = link_to image_tag(recipient.avatar.url(:thumb), :title=>recipient.name, :alt => recipient.name, :class => 'img-rounded'), conversation_path(conv.id,:box => @box,:page => 1)

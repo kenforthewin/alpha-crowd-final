@@ -1,0 +1,16 @@
+.col-md-12
+  .panel.panel-default
+    .panel-heading
+      %h4 User Settings
+    .panel-body
+      = simple_form_for @user, :html => { :class => 'form-horizontal', role: "form" } do |f|
+        .col-md-8.col-md-offset-2
+          .form-group
+            = f.input :first_name, placeholder: @user.first_name
+          .form-group
+            = f.input :last_name, placeholder: @user.last_name
+          .form-group
+            = f.input :handle, placeholder: @user.handle
+          .form-group
+            = f.input :avatar, as: :file
+          = f.button :submit, :class => 'btn-primary'

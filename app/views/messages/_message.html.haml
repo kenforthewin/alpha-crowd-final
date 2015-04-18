@@ -1,0 +1,21 @@
+.row
+  .col-md-12
+    = div_for(message, :class => (message.is_unread?(current_user) ? 'unread' : '')) do
+      .media
+        .pull-left
+          = link_to image_tag(message.sender.avatar.url(:thumb), 
+                     :title => message.sender.full_name,            
+                     :alt => message.sender.full_name,
+                     :class => 'img-rounded'),             
+            user_profile_path(message.sender.id)                            
+        .media-heading.name
+          .name
+            %h5
+              = link_to message.sender.full_name, user_profile_path(message.sender.id)
+              |
+              = time_ago_in_words(message.updated_at)
+              ago
+        .media-body
+          .word-break.pre-message
+            .well
+              = raw(message.body)
