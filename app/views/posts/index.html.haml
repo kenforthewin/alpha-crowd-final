@@ -1,25 +1,62 @@
-- model_class = Post
-.page-header
-  %h1=t '.title', :default => model_class.model_name.human.pluralize.titleize
-%table.table.table-striped
-  %thead
-    %tr
-      %th= model_class.human_attribute_name(:id)
-      %th= model_class.human_attribute_name(:topic_id)
-      %th= model_class.human_attribute_name(:text)
-      %th= model_class.human_attribute_name(:user_id)
-      %th= model_class.human_attribute_name(:created_at)
-      %th=t '.actions', :default => t("helpers.actions")
-  %tbody
-    - @posts.each do |post|
-      %tr
-        %td= link_to post.id, post_path(post)
-        %td= post.topic_id
-        %td= post.text
-        %td= post.user_id
-        %td=l post.created_at
-        %td
-          = link_to t('.edit', :default => t("helpers.links.edit")), edit_post_path(post), :class => 'btn btn-default btn-xs'
-          = link_to t('.destroy', :default => t("helpers.links.destroy")), post_path(post), :method => :delete, :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) }, :class => 'btn btn-xs btn-danger'
+.row
+  .col-md-12
+    .panel.panel-primary
+      .panel-heading
+        %h1.panel-title
+          = @thread.name
+      .panel-body
+        .row
+          .col-md-6
+            %button.btn.btn-lg.btn-primary{type: 'button'} New Post
+            
+          .col-md-6
+            .text-right
+              = will_paginate @posts, renderer: BootstrapPagination::Rails
+          .col-md-12
+            %hr
+        %table.table.table-striped.table-bordered
+          - @posts.each do |post|
+            %tr
+              %td
+                .row
+                  .col-md-12
+                    .text-center
+                      %h5
+                        = link_to post.user.name, user_profile_path(post.user.id)
+                .row
+                  .col-md-12
+                    .text-center
+                      = link_to image_tag(post.user.avatar.url(:thumb), 
+                     :title => post.user.full_name,            
+                     :alt => post.user.full_name,
+                     :class => 'img-rounded'),             
+            user_profile_path(post.user.id)
+                    %hr
+                .row
+                  .col-md-12
+                    %b Post:
+                    = post.created_at.strftime("%H:%M %m/%d/%y")
+                .row
+                  .col-md-12
+                    %b Join:
+                    = post.user.created_at.strftime("%m/%d/%Y")
+              %td{style: 'width:800px'}
+                .row
+                  .col-md-12
+                    = post.text.html_safe
+                    %hr
+              %td
+                .row
+                  .col-md-12
+                    .text-center
+                      .btn-group-vertical{role: 'group'}
+                        %button.btn.btn-default{type: 'button'} Quote
+                        %button.btn.btn-default{type: 'button'} Report
+                        %button.btn.btn-default{type: 'button'} User Profile
 
-= link_to t('.new', :default => t("helpers.links.new")), new_post_path, :class => 'btn btn-primary'
+
+
+
+
+
+
