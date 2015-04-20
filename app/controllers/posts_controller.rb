@@ -1,5 +1,6 @@
 class PostsController < ApplicationController
   before_action :set_post, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!
 
   respond_to :html
 
@@ -15,16 +16,32 @@ class PostsController < ApplicationController
 
   def new
     @post = Post.new
-    respond_with(@post)
+    @user = current_user
+    @forum = Forum.find_by_id(params[:forum_id])
+    @thread = ForumTopic.find_by_id(params[:forum_topic_id])
+
+    if @forum.nil? or @thread.nil?
+      return redirect_to root_path
+    end
   end
 
   def edit
   end
 
   def create
-    @post = Post.new(post_params)
+    @post = Post.new
+    @post.user = current_user
+    @post.forum_id = params[:post][:forum_id]
+    @post.forum_topic_id = params[:post][:forum_topic_id]
+    @post.text = params[:post][:text]
     @post.save
-    respond_with(@post)
+
+    thread = @post.forum_topic
+    thread.updated_at = DateTime.now
+    thread.save
+
+    flash[:notice] = 'Post saved'
+    redirect_to thread_path(thread)
   end
 
   def update

@@ -1,11 +1,12 @@
 class ForumTopicsController < ApplicationController
   before_action :set_forum_topic, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!
 
   respond_to :html
 
-  def index
-    @forum_topics = ForumTopic.all
-    respond_with(@forum_topics)
+  def index 
+    @forum = Forum.find_by_id(params[:forum_id])
+    @threads = @forum.forum_topics.page(params[:page]).order('updated_at DESC')
   end
 
   def show
@@ -14,16 +15,33 @@ class ForumTopicsController < ApplicationController
 
   def new
     @forum_topic = ForumTopic.new
-    respond_with(@forum_topic)
+    @user = current_user
+    @forum = Forum.find_by_id(params[:forum_id])
+
+    if @user.nil? or @forum.nil?
+      return redirect_to root_path
+    end
+
   end
 
   def edit
   end
 
   def create
-    @forum_topic = ForumTopic.new(forum_topic_params)
-    @forum_topic.save
-    respond_with(@forum_topic)
+    @forum_topic = ForumTopic.new
+    @forum_topic.name = params[:thread][:name]
+    @forum_topic.forum_id = params[:thread][:forum_id]
+    @forum_topic.user = current_user
+    @forum_topic.save!
+
+    @post = Post.new
+    @post.text = params[:thread][:post]
+    @post.forum = @forum_topic.forum
+    @post.forum_topic = @forum_topic
+    @post.user = @forum_topic.user
+    @post.save
+
+    redirect_to thread_path(@forum_topic.id)
   end
 
   def update

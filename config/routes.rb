@@ -26,7 +26,9 @@ Rails.application.routes.draw do
   post 'upvote/', to: 'topics#upvote', as: :modal_upvote
   post 'downvote/', to: 'topics#downvote', as: :modal_downvote
 
-  get 'threads/:forum_topic_id/posts', to: 'posts#index', as: :thread
+  get 'threads/:forum_topic_id', to: 'posts#index', as: :thread
+
+  get 'show_forum/:forum_id', to: 'forum_topics#index', as: :show_forum
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

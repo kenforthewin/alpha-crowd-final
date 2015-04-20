@@ -39,6 +39,24 @@ class TopicsController < ApplicationController
     @topic = Topic.new(topic_params)
     @topic.user_id = current_user.id
     @topic.save
+
+    forum = Forum.new
+    forum.name = @topic.title
+    forum.description = @topic.text_field
+    forum.save
+
+    pro_thread = ForumTopic.new
+    pro_thread.user_id = 1
+    pro_thread.forum = forum
+    pro_thread.name = 'Pros'
+    pro_thread.save
+
+    con_thread = ForumTopic.new
+    con_thread.user_id = 1
+    con_thread.forum = forum
+    con_thread.name = "Cons"
+    con_thread.save
+    
     respond_with(@topic)
   end
 

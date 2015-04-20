@@ -74,7 +74,7 @@
                     %th
                       = post.forum_topic.name
                     %th
-                      #{truncate(post.text, length: 30)}
+                      #{truncate(sanitize(post.text, tags: []))}
                     %th
                       = post.created_at.strftime("%m/%d/%Y")
         .well
