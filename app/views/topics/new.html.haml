@@ -1,1 +1,19 @@
-= render :partial => "form"
+.row
+  .col-md-12  
+    .panel.panel-primary
+      .panel-heading
+        .panel-title
+          New Topic
+      .panel-body
+        = simple_form_for @topic, :html => { :class => 'form-horizontal' } do |f|
+          .well
+            = f.input :title
+            = error_span(@topic[:title])
+            = f.input :text_field, as: :ckeditor
+            = error_span(@topic[:text_field])
+          = f.button :submit, :class => 'btn-primary'
+          %hr
+          .well
+            %h3 Content Rules:
+            %li example rule
+            %li another rule

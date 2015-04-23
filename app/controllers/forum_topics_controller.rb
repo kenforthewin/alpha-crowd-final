@@ -1,5 +1,4 @@
 class ForumTopicsController < ApplicationController
-  before_action :set_forum_topic, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_user!
 
   respond_to :html
@@ -7,10 +6,8 @@ class ForumTopicsController < ApplicationController
   def index 
     @forum = Forum.find_by_id(params[:forum_id])
     @threads = @forum.forum_topics.page(params[:page]).order('updated_at DESC')
-  end
 
-  def show
-    respond_with(@forum_topic)
+    @forum_list = true
   end
 
   def new
@@ -22,9 +19,6 @@ class ForumTopicsController < ApplicationController
       return redirect_to root_path
     end
 
-  end
-
-  def edit
   end
 
   def create
@@ -42,16 +36,6 @@ class ForumTopicsController < ApplicationController
     @post.save
 
     redirect_to thread_path(@forum_topic.id)
-  end
-
-  def update
-    @forum_topic.update(forum_topic_params)
-    respond_with(@forum_topic)
-  end
-
-  def destroy
-    @forum_topic.destroy
-    respond_with(@forum_topic)
   end
 
   private

@@ -1,31 +1,26 @@
 class PostsController < ApplicationController
-  before_action :set_post, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_user!
 
   respond_to :html
 
   def index
     @thread = ForumTopic.find_by_id(params[:forum_topic_id])
+    @forum = @thread.forum
     @posts = @thread.posts.page(params[:page]).order('created_at ASC')
-    #respond_with(@posts)
-  end
 
-  def show
-    respond_with(@post)
+    @thread_response = true
+    #respond_with(@posts)
   end
 
   def new
     @post = Post.new
     @user = current_user
-    @forum = Forum.find_by_id(params[:forum_id])
     @thread = ForumTopic.find_by_id(params[:forum_topic_id])
+    @forum = @thread.forum
 
     if @forum.nil? or @thread.nil?
       return redirect_to root_path
     end
-  end
-
-  def edit
   end
 
   def create
@@ -42,16 +37,6 @@ class PostsController < ApplicationController
 
     flash[:notice] = 'Post saved'
     redirect_to thread_path(thread)
-  end
-
-  def update
-    @post.update(post_params)
-    respond_with(@post)
-  end
-
-  def destroy
-    @post.destroy
-    respond_with(@post)
   end
 
   private

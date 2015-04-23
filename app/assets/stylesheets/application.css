@@ -19,6 +19,7 @@
 html,
 body {
   height: 100%;
+  background-color: #C0C0C0;
   /* The html and body elements cannot have any padding or margin. */
 }
 /* Wrapper for page content to push down footer */

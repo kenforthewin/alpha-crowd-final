@@ -18,6 +18,7 @@
 #
 
 class Topic < ActiveRecord::Base
+	has_one :forum
 	acts_as_votable
 	belongs_to :user
 	validates :title, :text_field, :user_id, :presence => :true

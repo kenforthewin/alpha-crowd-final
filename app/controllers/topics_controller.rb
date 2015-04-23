@@ -1,5 +1,5 @@
 class TopicsController < ApplicationController
-  before_action :set_topic, only: [:show, :edit, :update, :destroy, :upvote, :downvote]
+  before_action :set_topic, only: [:upvote, :downvote]
   before_action :authenticate_user!
 
   respond_to :html
@@ -8,42 +8,44 @@ class TopicsController < ApplicationController
     @topics = Topic.page(params[:page]).order('created_at DESC')
   end
 
-  def show
-    respond_with(@topic)
-  end
-
   def new
     @topic = Topic.new
     respond_with(@topic)
-  end
-
-  def edit
   end
 
   def upvote
     if !current_user.liked? @topic
       @topic.vote_by :voter => current_user, vote: 'like'
     end
-    redirect_to topics_path
+    flash[:notice] = 'Thanks for voting. Feel free to participate in this topic\'s forum.'
+    redirect_to show_forum_path(@topic.forum)
   end
 
   def downvote
     if !current_user.disliked? @topic
       @topic.downvote_from current_user
     end
-
-    redirect_to topics_path
+    flash[:notice] = 'Thanks for voting. Feel free to participate in this topic\'s forum.'
+    redirect_to show_forum_path(@topic.forum)
   end
 
   def create
     @topic = Topic.new(topic_params)
     @topic.user_id = current_user.id
     @topic.save
+    @topic.vote_by :voter => current_user, vote: 'like'
 
     forum = Forum.new
     forum.name = @topic.title
     forum.description = @topic.text_field
+    forum.topic_id = @topic.id
     forum.save
+
+    con_thread = ForumTopic.new
+    con_thread.user_id = 1
+    con_thread.forum = forum
+    con_thread.name = "Cons"
+    con_thread.save
 
     pro_thread = ForumTopic.new
     pro_thread.user_id = 1
@@ -51,23 +53,7 @@ class TopicsController < ApplicationController
     pro_thread.name = 'Pros'
     pro_thread.save
 
-    con_thread = ForumTopic.new
-    con_thread.user_id = 1
-    con_thread.forum = forum
-    con_thread.name = "Cons"
-    con_thread.save
-    
-    respond_with(@topic)
-  end
-
-  def update
-    @topic.update(topic_params)
-    respond_with(@topic)
-  end
-
-  def destroy
-    @topic.destroy
-    respond_with(@topic)
+    redirect_to show_forum_path(forum)
   end
 
   private

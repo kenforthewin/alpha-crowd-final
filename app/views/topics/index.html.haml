@@ -1,13 +1,10 @@
 .row
   .col-md-offset-5
     = will_paginate @topics, renderer: BootstrapPagination::Rails
-.row
-  .text-right
-    = link_to 'New Topic', new_topic_path, class: 'btn btn-primary'
   - @topics.each do |topic|
     .row
       .col-md-8.col-md-offset-2
-        .panel.panel-default
+        .panel.panel-primary
           .panel-heading
             .panel-title
               .text-left
@@ -15,21 +12,30 @@
                   #{topic.cached_weighted_score}
                 #{topic.title}
           .panel-body
-            .h5
-              .well
-                = topic.text_field.html_safe
-                .text-right
-                  %h5
-                    #{'-'} proposed by #{link_to topic.user.name, user_profile_path(topic.user)} on #{topic.created_at.strftime("%m/%d/%Y")}
-              .btn-group.btn-group-lg{:role => 'group'}
-                = link_to upvote_path(topic.id), class: 'btn btn-success', role: 'button' do
-                  %i.glyphicon.glyphicon-chevron-up{style: 'color:white'}
-                = link_to downvote_path(topic.id), class: 'btn btn-danger', role: 'button' do
-                  %i.glyphicon.glyphicon-chevron-down{style: 'color:white'}
-              .btn-group.btn-group{:role => 'group'}
-                %button.btn.btn-info{type: 'button'} Forum
-                %button.btn.btn-warning{type: 'button'} Report
-                %button.btn.btn-danger{type: 'button'} Request Deletion
+            .row
+              .col-md-2
+                = link_to image_tag(topic.user.avatar.url(:thumb), 
+                     :title => topic.user.full_name,            
+                     :alt => topic.user.full_name,
+                     :class => 'img-rounded'),             
+            user_profile_path(topic.user.id)
+              .col-md-10
+                .well
+                  = topic.text_field.html_safe
+                  .text-right
+                    %h5
+                      #{'-'} proposed by #{link_to topic.user.name, user_profile_path(topic.user)} on #{topic.created_at.strftime("%m/%d/%Y")}
+                .btn-group.btn-group-lg{:role => 'group'}
+                  = link_to upvote_path(topic.id), class: 'btn btn-success', role: 'button' do
+                    %i.glyphicon.glyphicon-chevron-up{style: 'color:white'}
+                  = link_to downvote_path(topic.id), class: 'btn btn-danger', role: 'button' do
+                    %i.glyphicon.glyphicon-chevron-down{style: 'color:white'}
+                .btn-group.btn-group{:role => 'group'}
+                  = link_to show_forum_path(topic.forum), class: 'btn btn-info', role: 'button' do
+                    Forum
+                  %button.btn.btn-warning{type: 'button'} Report
+                  - if current_user == topic.user
+                    %button.btn.btn-danger{type: 'button'} Request Deletion
             / .row
             /   .col-md-9
             /     .row
