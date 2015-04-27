@@ -1,23 +1,58 @@
-- model_class = Forum
-.page-header
-  %h1=t '.title', :default => model_class.model_name.human.pluralize.titleize
-%table.table.table-striped
-  %thead
-    %tr
-      %th= model_class.human_attribute_name(:id)
-      %th= model_class.human_attribute_name(:name)
-      %th= model_class.human_attribute_name(:description)
-      %th= model_class.human_attribute_name(:created_at)
-      %th=t '.actions', :default => t("helpers.actions")
-  %tbody
-    - @forums.each do |forum|
-      %tr
-        %td= link_to forum.id, forum_path(forum)
-        %td= forum.name
-        %td= forum.description
-        %td=l forum.created_at
-        %td
-          = link_to t('.edit', :default => t("helpers.links.edit")), edit_forum_path(forum), :class => 'btn btn-default btn-xs'
-          = link_to t('.destroy', :default => t("helpers.links.destroy")), forum_path(forum), :method => :delete, :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) }, :class => 'btn btn-xs btn-danger'
+.row
+  .col-md-12
+    .panel.panel-primary
+      .panel-heading
+        %h1.panel-title
+          Forums
+      .panel-body
+        .row
+          .col-md-12
+            = will_paginate @forums, renderer: BootstrapPagination::Rails
+            %hr
+        .row
+          .col-md-12
+            %table.table.table-striped.table-bordered
+              %tr
+                %th Score
+                %th Forum
+                %th Latest Thread
+                %th Post Date
+              -unless @general.nil? 
+                %tr
+                  %td
+                  %td
+                    %h4
+                      %b= link_to @general.name, show_forum_path(@general)
+                  %td
+                    - unless @top_general.nil? or @top_general.posts.last.nil?
+                      %h4
+                        %b= link_to @top_general.name, thread_path(@top_general)
+                  %td
+                    - unless @top_general.nil?
+                      %h4
+                        %b= @general.updated_at.strftime('%d %b %y')
+              - @forums.each do |forum|
+                - unless forum.name == 'General'
+                  %tr
+                    %td{style: 'width:70px'}
+                      - unless forum.topic.nil?
+                        .text-center
+                          %h4
+                            %span.badge.badge-primary= forum.topic.cached_weighted_score
+                    %td{style: 'width:600px'}
+                      %h4
+                        = link_to forum.name, show_forum_path(forum)
+                    %td{style: 'width:300px'}
+                      - top_topic = forum.forum_topics.order("updated_at").last
+                      - unless top_topic.nil? or top_topic.posts.last.nil?
+                        %h4
+                          = link_to top_topic.name, thread_path(top_topic)
+                    %td
+                      - unless top_topic.nil?
+                        %h4
+                          = top_topic.updated_at.strftime('%d %b %y')
+        .row
+          .col-md-12
+            = will_paginate @forums, renderer: BootstrapPagination::Rails
 
-= link_to t('.new', :default => t("helpers.links.new")), new_forum_path, :class => 'btn btn-primary'
+

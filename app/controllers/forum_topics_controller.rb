@@ -5,12 +5,13 @@ class ForumTopicsController < ApplicationController
 
   def index 
     @forum = Forum.find_by_id(params[:forum_id])
-    @threads = @forum.forum_topics.page(params[:page]).order('updated_at DESC')
-
+    @sticky_threads = @forum.forum_topics.sticky_threads.order('updated_at ASC')
+    @nonsticky_threads = @forum.forum_topics.nonsticky_threads.page(params[:page]).order('updated_at DESC')
     @forum_list = true
   end
 
   def new
+    @forum_list = true
     @forum_topic = ForumTopic.new
     @user = current_user
     @forum = Forum.find_by_id(params[:forum_id])
@@ -25,6 +26,7 @@ class ForumTopicsController < ApplicationController
     @forum_topic = ForumTopic.new
     @forum_topic.name = params[:thread][:name]
     @forum_topic.forum_id = params[:thread][:forum_id]
+    @forum_topic.sticky = false
     @forum_topic.user = current_user
     @forum_topic.save!
 
@@ -34,6 +36,9 @@ class ForumTopicsController < ApplicationController
     @post.forum_topic = @forum_topic
     @post.user = @forum_topic.user
     @post.save
+
+    forum = @forum_topic.forum
+    forum.update(updated_at: DateTime.current)
 
     redirect_to thread_path(@forum_topic.id)
   end

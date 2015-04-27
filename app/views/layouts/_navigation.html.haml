@@ -10,9 +10,12 @@
       .navbar-collapse.collapse
         %ul.nav.navbar-nav.navbar-left
           %li
-            = link_to '(crowd)UCF', root_path, html_options = {:class =>'navbar-brand'}
+            = link_to root_path, html_options = {:class =>'navbar-brand'} do
+              %small
+                (crowd)
+              UCF
+
           -if user_signed_in?
-            %li
             %li.dropdown
               %a.dropdown-toggle{"aria-expanded" => "false", "data-toggle" => "dropdown", :href => "#", :role => "button"}
                 %i.glyphicon.glyphicon-plus
@@ -28,8 +31,15 @@
                     = link_to 'New Thread', new_forum_topic_path(forum_id: @forum.id)
                   %li
                     = link_to 'New Post', new_post_path(forum_topic_id: @thread.id)
+            %li= link_to 'Forums', list_forums_path
+            - if current_user.admin
+              %li= link_to 'Manage Users', manage_users_path
         %ul.nav.navbar-nav.navbar-right
           - if user_signed_in?
+            %form.navbar-form.navbar-left{:role => "search"}
+              .form-group
+                %input.form-control{:placeholder => "Search (coming soon)", :type => "text"}
+              %button.btn.btn-default{:type => "submit"} Go
             %li
               = link_to 'Messages', conversations_path(page: 1, box: 'index')
             %li

@@ -69,6 +69,6 @@ body {
     height: 155px; /* .push must be the same height as .footer */
 }
 
-a.btn:visited { 
+a.btn-primary:visited, a.btn-success:visited { 
     color:white;
 }

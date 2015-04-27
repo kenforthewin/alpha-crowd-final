@@ -1,5 +1,12 @@
 .row
   .col-md-12
+    %ol.breadcrumb
+      %li
+        = link_to 'Forums', list_forums_path
+      %li.active
+        = link_to @forum.name, show_forum_path(@forum)
+.row
+  .col-md-12
     .panel.panel-primary
       .panel-heading
         %h1.panel-title
@@ -10,7 +17,7 @@
             = link_to 'New Thread', new_forum_topic_path(forum_id: @forum.id), class: 'btn btn-primary'
           .col-md-6
             .text-right
-              = will_paginate @threads, renderer: BootstrapPagination::Rails
+              = will_paginate @nonsticky_threads, renderer: BootstrapPagination::Rails
         .row
           .col-md-12
             %br
@@ -22,7 +29,25 @@
                 %th Thread Starter
                 %th Last Post
                 %th Replies
-              - @threads.each do |thread|
+              - @sticky_threads.each do |thread|
+                %tr
+                  %td{style: 'width:750px'}
+                    %b STICKY: 
+                    = link_to thread.name, thread_path(thread)
+                  %td
+                    = link_to thread.user.name, user_profile_path(thread.user)
+                  %td
+                    - if !thread.posts.last.nil?
+                      = time_ago_in_words(thread.posts.last.created_at)
+                      ago by
+                      = link_to thread.posts.last.user.name, user_profile_path(thread.posts.last.user)
+                    - else
+                      = time_ago_in_words(thread.created_at)
+                      ago by
+                      = link_to thread.user.name, user_profile_path(thread.user)
+                    %td
+                      = thread.posts.count - 1 >= 0 ? thread.posts.count - 1 : 0
+              - @nonsticky_threads.each do |thread|
                 %tr
                   %td{style: 'width:750px'}
                     = link_to thread.name, thread_path(thread)
@@ -40,4 +65,6 @@
 
                   %td
                     = thread.posts.count - 1 >= 0 ? thread.posts.count - 1 : 0
+                  %td
+                  = link_to 'Delete', delete_thread_path(thread), method: :delete, class: 'btn btn-danger'
 

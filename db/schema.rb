@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150422010957) do
+ActiveRecord::Schema.define(version: 20150426050541) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -38,6 +38,7 @@ ActiveRecord::Schema.define(version: 20150422010957) do
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "sticky"
   end
 
   create_table "forums", force: true do |t|
@@ -108,7 +109,22 @@ ActiveRecord::Schema.define(version: 20150422010957) do
     t.datetime "updated_at"
     t.integer  "forum_topic_id"
     t.integer  "forum_id"
+    t.integer  "cached_votes_total",      default: 0
+    t.integer  "cached_votes_score",      default: 0
+    t.integer  "cached_votes_up",         default: 0
+    t.integer  "cached_votes_down",       default: 0
+    t.integer  "cached_weighted_score",   default: 0
+    t.integer  "cached_weighted_total",   default: 0
+    t.float    "cached_weighted_average", default: 0.0
   end
+
+  add_index "posts", ["cached_votes_down"], name: "index_posts_on_cached_votes_down", using: :btree
+  add_index "posts", ["cached_votes_score"], name: "index_posts_on_cached_votes_score", using: :btree
+  add_index "posts", ["cached_votes_total"], name: "index_posts_on_cached_votes_total", using: :btree
+  add_index "posts", ["cached_votes_up"], name: "index_posts_on_cached_votes_up", using: :btree
+  add_index "posts", ["cached_weighted_average"], name: "index_posts_on_cached_weighted_average", using: :btree
+  add_index "posts", ["cached_weighted_score"], name: "index_posts_on_cached_weighted_score", using: :btree
+  add_index "posts", ["cached_weighted_total"], name: "index_posts_on_cached_weighted_total", using: :btree
 
   create_table "topics", force: true do |t|
     t.string   "title"
@@ -134,12 +150,12 @@ ActiveRecord::Schema.define(version: 20150422010957) do
   add_index "topics", ["cached_weighted_total"], name: "index_topics_on_cached_weighted_total", using: :btree
 
   create_table "users", force: true do |t|
-    t.string   "email",                  default: "", null: false
-    t.string   "encrypted_password",     default: "", null: false
+    t.string   "email",                   default: "",  null: false
+    t.string   "encrypted_password",      default: "",  null: false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",          default: 0,  null: false
+    t.integer  "sign_in_count",           default: 0,   null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.inet     "current_sign_in_ip"
@@ -155,8 +171,23 @@ ActiveRecord::Schema.define(version: 20150422010957) do
     t.integer  "avatar_file_size"
     t.datetime "avatar_updated_at"
     t.boolean  "banned"
+    t.string   "forum_status"
+    t.integer  "cached_votes_total",      default: 0
+    t.integer  "cached_votes_score",      default: 0
+    t.integer  "cached_votes_up",         default: 0
+    t.integer  "cached_votes_down",       default: 0
+    t.integer  "cached_weighted_score",   default: 0
+    t.integer  "cached_weighted_total",   default: 0
+    t.float    "cached_weighted_average", default: 0.0
   end
 
+  add_index "users", ["cached_votes_down"], name: "index_users_on_cached_votes_down", using: :btree
+  add_index "users", ["cached_votes_score"], name: "index_users_on_cached_votes_score", using: :btree
+  add_index "users", ["cached_votes_total"], name: "index_users_on_cached_votes_total", using: :btree
+  add_index "users", ["cached_votes_up"], name: "index_users_on_cached_votes_up", using: :btree
+  add_index "users", ["cached_weighted_average"], name: "index_users_on_cached_weighted_average", using: :btree
+  add_index "users", ["cached_weighted_score"], name: "index_users_on_cached_weighted_score", using: :btree
+  add_index "users", ["cached_weighted_total"], name: "index_users_on_cached_weighted_total", using: :btree
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 

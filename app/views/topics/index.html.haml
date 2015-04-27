@@ -26,48 +26,19 @@
                     %h5
                       #{'-'} proposed by #{link_to topic.user.name, user_profile_path(topic.user)} on #{topic.created_at.strftime("%m/%d/%Y")}
                 .btn-group.btn-group-lg{:role => 'group'}
-                  = link_to upvote_path(topic.id), class: 'btn btn-success', role: 'button' do
-                    %i.glyphicon.glyphicon-chevron-up{style: 'color:white'}
-                  = link_to downvote_path(topic.id), class: 'btn btn-danger', role: 'button' do
-                    %i.glyphicon.glyphicon-chevron-down{style: 'color:white'}
+                  - btn_class = ''
+                  - current_user.voted_up_on?(topic) ? btn_class ='btn btn-success' : btn_class ='btn btn-default'
+                  = link_to upvote_path(topic.id), class: btn_class, role: 'button' do
+                    %i.glyphicon.glyphicon-chevron-up
+                  - current_user.voted_down_on?(topic) ? btn_class = 'btn btn-danger' : btn_class = 'btn btn-default'
+                  = link_to downvote_path(topic.id), class: btn_class, role: 'button' do
+                    %i.glyphicon.glyphicon-chevron-down
                 .btn-group.btn-group{:role => 'group'}
                   = link_to show_forum_path(topic.forum), class: 'btn btn-info', role: 'button' do
                     Forum
                   %button.btn.btn-warning{type: 'button'} Report
                   - if current_user == topic.user
                     %button.btn.btn-danger{type: 'button'} Request Deletion
-            / .row
-            /   .col-md-9
-            /     .row
-            /       .col-md-3
-            /         .row
-            /           .container
-            /             %h4  
-            /               = link_to upvote_path(topic.id) do
-            /                 %i.glyphicon.glyphicon-chevron-up
-            /         .row
-            /           .container
-            /             %span.badge.badge-primary
-            /               %h5
-            /                 #{topic.cached_weighted_score}
-            /         .row
-            /           .container
-            /             %h4
-            /               = link_to downvote_path(topic.id) do
-            /                 %i.glyphicon.glyphicon-chevron-down
-#vote.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "myModalLabel", :role => "dialog", :tabindex => "-1"}
-  .modal-dialog
-    .modal-content
-      .modal-header
-        %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
-          %span{"aria-hidden" => "true"} &times;
-        %h4#modalTitle.modal-title Vote on 
-      .modal-body
-        .btn-group.btn-group-lg{:role => 'group'}
-          = simple_form_for :upvote, url: modal_upvote_path, method: :post do |f|
-            = f.hidden_field :id, id: 'upId', value: 0
-            = f.button :submit, class: 'btn btn-success'
-          = simple_form_for :downvote, url: modal_downvote_path, method: :post do |f|
-            = f.hidden_field :id, id: 'downId', value: 0
-            = f.button :submit, class: 'btn btn-success'
+                  - if current_user.admin?
+                    = link_to 'Delete', delete_topic_path(topic), :confirm => 'Are you sure?', method: :delete, class: 'btn btn-danger'
 

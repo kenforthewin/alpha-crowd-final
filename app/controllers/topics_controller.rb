@@ -16,6 +16,9 @@ class TopicsController < ApplicationController
   def upvote
     if !current_user.liked? @topic
       @topic.vote_by :voter => current_user, vote: 'like'
+      if @topic.user != current_user
+        @topic.user.vote_by :voter => current_user, vote: 'like'
+      end
     end
     flash[:notice] = 'Thanks for voting. Feel free to participate in this topic\'s forum.'
     redirect_to show_forum_path(@topic.forum)
@@ -24,6 +27,9 @@ class TopicsController < ApplicationController
   def downvote
     if !current_user.disliked? @topic
       @topic.downvote_from current_user
+      if @topic.user != current_user
+        @topic.user.downvote_from current_user
+      end
     end
     flash[:notice] = 'Thanks for voting. Feel free to participate in this topic\'s forum.'
     redirect_to show_forum_path(@topic.forum)
@@ -41,17 +47,19 @@ class TopicsController < ApplicationController
     forum.topic_id = @topic.id
     forum.save
 
-    con_thread = ForumTopic.new
-    con_thread.user_id = 1
-    con_thread.forum = forum
-    con_thread.name = "Cons"
-    con_thread.save
-
     pro_thread = ForumTopic.new
     pro_thread.user_id = 1
+    pro_thread.sticky = true
     pro_thread.forum = forum
     pro_thread.name = 'Pros'
     pro_thread.save
+
+    con_thread = ForumTopic.new
+    con_thread.user_id = 1
+    con_thread.sticky = true
+    con_thread.forum = forum
+    con_thread.name = "Cons"
+    con_thread.save
 
     redirect_to show_forum_path(forum)
   end

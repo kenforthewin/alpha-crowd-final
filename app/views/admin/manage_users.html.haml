@@ -1,0 +1,33 @@
+.row
+  .col-md-12
+    .panel.panel-primary
+      .panel-heading
+        .panel-title
+          Users
+      .panel-body
+        .row
+          .col-md-12
+            %table.table.table-striped.table-bordered
+              - @users.each do |user|
+                - unless user == current_user
+                  %tr
+                    %td
+                      .row
+                        .col-md-12
+                          .text-center
+                            %h5
+                              = link_to user.name, user_profile_path(user.id)
+                      .row
+                        .col-md-12
+                          .text-center
+                            = link_to image_tag(user.avatar.url(:thumb), 
+                           :title => user.full_name,            
+                           :alt => user.full_name,
+                           :class => 'img-rounded'),             
+                  user_profile_path(user.id)
+                    %td
+                      .btn-group{role: 'group'}
+                        %button.btn.btn-default{type: 'button'} Ban
+                        %button.btn.btn-default{type: 'button'} Make Admin
+
+

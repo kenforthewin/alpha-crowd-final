@@ -1,7 +1,12 @@
 .row
   .col-md-12
-    %h2
-      = @thread.forum.name
+    %ol.breadcrumb
+      %li
+        = link_to 'Forums', list_forums_path
+      %li
+        = link_to @thread.forum.name, show_forum_path(@thread.forum)
+      %li.active
+        = @thread.name
     .panel.panel-primary
       .panel-heading
         %h1.panel-title
@@ -19,25 +24,36 @@
           - @posts.each do |post|
             %tr
               %td
+                %br
                 .row
                   .col-md-12
                     .text-center
-                      %h5
-                        = link_to post.user.name, user_profile_path(post.user.id)
-                .row
-                  .col-md-12
+                      %b
+                        %h4
+                          = link_to post.user.name, user_profile_path(post.user.id)
                     .text-center
                       = link_to image_tag(post.user.avatar.url(:thumb), 
                      :title => post.user.full_name,            
                      :alt => post.user.full_name,
                      :class => 'img-rounded'),             
             user_profile_path(post.user.id)
-                    %hr
                 .row
                   .col-md-12
-                    %b Posted
-                    = time_ago_in_words(post.created_at)
-                    ago
+                    .text-center
+                      -if post.user.admin?
+                        %h5{style: 'color:red'}
+                          = post.user.f_status
+                          %span.badge.badge-primary
+                            %span.glyphicon.glyphicon-star
+                            = post.user.cached_weighted_score
+                      -else
+                        %h5{style: 'color:blue'}
+                          = post.user.f_status
+                          %span.badge.badge-primary
+                            %span.glyphicon.glyphicon-star
+                            = post.user.cached_weighted_score
+                    %hr
+
                 .row
                   .col-md-12
                     %b Joined
@@ -46,6 +62,14 @@
               %td{style: 'width:800px'}
                 .row
                   .col-md-12
+                    .text-right
+                      %span.badge.badge-primary
+                        %b
+                          #{post.cached_weighted_score}
+                      Posted
+                      = time_ago_in_words(post.created_at)
+                      ago
+                    %hr
                     = post.text.html_safe
                     %hr
               %td
@@ -57,6 +81,21 @@
                         %button.btn.btn-default{type: 'button'} Report
                         %button.btn.btn-default{type: 'button'} Message
                         %button.btn.btn-default{type: 'button'} User Profile
+                        - if current_user.admin?
+                          = link_to 'Delete', delete_post_path(post), method: :delete, class: 'btn btn-danger'
+
+                .row
+                  .col-md-12
+                    %hr
+                    .text-center
+                      .btn-group.btn-group-lg{:role => 'group'}
+                        - btn_class = ''
+                        - current_user.voted_up_on?(post) ? btn_class ='btn btn-success' : btn_class ='btn btn-default'
+                        = link_to post_upvote_path(post), class: btn_class, role: 'button' do
+                          %i.glyphicon.glyphicon-chevron-up
+                        - current_user.voted_down_on?(post) ? btn_class = 'btn btn-danger' : btn_class = 'btn btn-default'
+                        = link_to post_downvote_path(post), class: btn_class, role: 'button' do
+                          %i.glyphicon.glyphicon-chevron-down
         .row
           .col-md-6
             = link_to 'New Post', new_post_path(forum_topic_id: @thread.id, forum_id: @thread.forum.id), class: 'btn btn-lg btn-primary'
