@@ -17,20 +17,22 @@
                 %th Forum
                 %th Latest Thread
                 %th Post Date
-              -unless @general.nil? 
-                %tr
-                  %td
-                  %td
-                    %h4
-                      %b= link_to @general.name, show_forum_path(@general)
-                  %td
-                    - unless @top_general.nil? or @top_general.posts.last.nil?
+              -unless @stickies.nil? 
+                - @stickies.each do |sticky|
+                  %tr
+                    %td
+                    %td
                       %h4
-                        %b= link_to @top_general.name, thread_path(@top_general)
-                  %td
-                    - unless @top_general.nil?
+                        %b= link_to sticky.name, show_forum_path(sticky)
+                    %td
+                    - top_topic = sticky.forum_topics.order("updated_at").last
+                    - unless top_topic.nil? or top_topic.posts.last.nil?
                       %h4
-                        %b= @general.updated_at.strftime('%d %b %y')
+                        %b= link_to top_topic.name, thread_path(top_topic)
+                    %td
+                      - unless top_topic.nil?
+                        %h4
+                          %b= sticky.updated_at.strftime('%d %b %y')
               - @forums.each do |forum|
                 - unless forum.name == 'General'
                   %tr
@@ -54,5 +56,3 @@
         .row
           .col-md-12
             = will_paginate @forums, renderer: BootstrapPagination::Rails
-
-

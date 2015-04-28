@@ -8,6 +8,7 @@
 #  created_at  :datetime
 #  updated_at  :datetime
 #  topic_id    :integer
+#  sticky      :boolean
 #
 
 require 'test_helper'

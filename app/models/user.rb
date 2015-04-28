@@ -38,15 +38,17 @@ class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable
+         :recoverable, :rememberable, :trackable, :validatable, :confirmable
 	
 	has_many :topics
 	has_many :forum_topics
 	has_many :posts
 
-	validates :first_name, :last_name, presence: true
+	# validates :first_name, :last_name, presence: true
 
   validates :handle, uniqueness: true
+
+  validates :email, format: {with: /(@knights.ucf.edu)+/, message: 'must have @knights.ucf.edu'}
 
 	has_attached_file :avatar, :styles => { :medium => "300x300>", :thumb => "100x100>" }, :default_url => ":style/default.jpg"
   validates_attachment_content_type :avatar, :content_type => /\Aimage\/.*\Z/

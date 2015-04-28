@@ -7,7 +7,11 @@ class PostsController < ApplicationController
   def index
     @thread = ForumTopic.find_by_id(params[:forum_topic_id])
     @forum = @thread.forum
-    @posts = @thread.posts.page(params[:page]).order('created_at ASC')
+    if params[:sort].eql? 'vote'
+      @posts = @thread.posts.order('cached_weighted_score DESC').page(params[:page])
+    else
+      @posts = @thread.posts.order('created_at ASC').page(params[:page])
+    end
 
     @thread_response = true
     #respond_with(@posts)

@@ -19,6 +19,21 @@
                      :alt => topic.user.full_name,
                      :class => 'img-rounded'),             
             user_profile_path(topic.user.id)
+                .row
+                  .col-md-12
+                    .text-center
+                      -if topic.user.admin?
+                        %h5{style: 'color:red'}
+                          = topic.user.f_status
+                          %span.badge.badge-primary
+                            %span.glyphicon.glyphicon-star
+                            = topic.user.cached_weighted_score
+                      -else
+                        %h5{style: 'color:blue'}
+                          = topic.user.f_status
+                          %span.badge.badge-primary
+                            %span.glyphicon.glyphicon-star
+                            = topic.user.cached_weighted_score
               .col-md-10
                 .well
                   = topic.text_field.html_safe

@@ -2,11 +2,8 @@ class ForumsController < ApplicationController
   respond_to :html
 
   def index
-    @general = Forum.find_by_name 'General'
-    unless @general.nil?
-      @top_general = @general.forum_topics.order("updated_at").last
-    end
-    @forums = Forum.page(params[:page]).order('updated_at DESC')
+    @stickies = Forum.sticky_forums
+    @forums = Forum.all.order('updated_at DESC').page(params[:page])
     @forums_list = true
   end
 
