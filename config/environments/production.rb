@@ -54,12 +54,12 @@ Rails.application.configure do
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store
 
-ActionMailer::Base.delivery_method = :smtp
-ActionMailer::Base.perform_deliveries = true
-ActionMailer::Base.raise_delivery_errors = true
+config.action_mailer.delivery_method = :smtp
+config.action_mailer.perform_deliveries = true
+config.action_mailer.raise_delivery_errors = true
 
 
-ActionMailer::Base.smtp_settings = {
+Aconfig.action_mailer..smtp_settings = {
   :address              => "smtp.gmail.com",
   :port                 => 587,
   :domain               => "gmail.com",
@@ -69,7 +69,7 @@ ActionMailer::Base.smtp_settings = {
   :enable_starttls_auto => true
 }
 
-ActionMailer::Base.default_url_options[:host] = "https://crowducf.herokuapp.com"
+config.action_mailer.default_url_options[:host] = "https://crowducf.herokuapp.com"
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.action_controller.asset_host = "http://assets.example.com"
