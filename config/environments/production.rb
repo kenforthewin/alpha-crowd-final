@@ -69,7 +69,7 @@ config.action_mailer..smtp_settings = {
   :enable_starttls_auto => true
 }
 
-config.action_mailer.default_url_options = {host: "herokuapp.com"}
+config.action_mailer.default_url_options = {host: "crowducf.herokuapp.com"}
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.action_controller.asset_host = "http://assets.example.com"
