@@ -59,14 +59,15 @@ config.action_mailer.perform_deliveries = true
 config.action_mailer.raise_delivery_errors = true
 
 
-config.action_mailer..smtp_settings = {
+config.action_mailer.smtp_settings = {
   :address              => "smtp.gmail.com",
   :port                 => 587,
   :domain               => "gmail.com",
   :user_name            => "bergquist.kenneth@gmail.com",
   :password             => "Yw854252jj95595",
-  :authentication       => "plain",
-  :enable_starttls_auto => true
+  :authentication       => :plain,
+  :enable_starttls_auto => true,
+  tsl: true
 }
 
 config.action_mailer.default_url_options = {host: "crowducf.herokuapp.com"}
