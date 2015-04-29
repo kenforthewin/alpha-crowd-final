@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'static_pages/deathgrips'
+
   mount Ckeditor::Engine => '/ckeditor'
   resources :posts
 
@@ -42,6 +44,8 @@ Rails.application.routes.draw do
   delete 'delete_topic/:topic_id', to: 'admin#delete_topic', as: :delete_topic
 
   delete 'delete_thread/:forum_topic_id', to: 'admin#delete_thread', as: :delete_thread
+
+  get 'deathgrips', to: 'static_pages#deathgrips'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
