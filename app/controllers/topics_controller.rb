@@ -48,14 +48,14 @@ class TopicsController < ApplicationController
     forum.save
 
     pro_thread = ForumTopic.new
-    pro_thread.user_id = 1
+    pro_thread.user = current_user
     pro_thread.sticky = true
     pro_thread.forum = forum
     pro_thread.name = 'Pros'
     pro_thread.save
 
     con_thread = ForumTopic.new
-    con_thread.user_id = 1
+    con_thread.user = current_user
     con_thread.sticky = true
     con_thread.forum = forum
     con_thread.name = "Cons"

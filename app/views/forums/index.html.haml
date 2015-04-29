@@ -34,25 +34,24 @@
                         %h4
                           %b= sticky.updated_at.strftime('%d %b %y')
               - @forums.each do |forum|
-                - unless forum.name == 'General'
-                  %tr
-                    %td{style: 'width:70px'}
-                      - unless forum.topic.nil?
-                        .text-center
-                          %h4
-                            %span.badge.badge-primary= forum.topic.cached_weighted_score
-                    %td{style: 'width:600px'}
+                %tr
+                  %td{style: 'width:70px'}
+                    - unless forum.topic.nil?
+                      .text-center
+                        %h4
+                          %span.badge.badge-primary= forum.topic.cached_weighted_score
+                  %td{style: 'width:600px'}
+                    %h4
+                      = link_to forum.name, show_forum_path(forum)
+                  %td{style: 'width:300px'}
+                    - top_topic = forum.forum_topics.order("updated_at").last
+                    - unless top_topic.nil? or top_topic.posts.last.nil?
                       %h4
-                        = link_to forum.name, show_forum_path(forum)
-                    %td{style: 'width:300px'}
-                      - top_topic = forum.forum_topics.order("updated_at").last
-                      - unless top_topic.nil? or top_topic.posts.last.nil?
-                        %h4
-                          = link_to top_topic.name, thread_path(top_topic)
-                    %td
-                      - unless top_topic.nil?
-                        %h4
-                          = top_topic.updated_at.strftime('%d %b %y')
+                        = link_to top_topic.name, thread_path(top_topic)
+                  %td
+                    - unless top_topic.nil?
+                      %h4
+                        = top_topic.updated_at.strftime('%d %b %y')
         .row
           .col-md-12
             = will_paginate @forums, renderer: BootstrapPagination::Rails
