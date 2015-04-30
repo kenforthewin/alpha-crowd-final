@@ -26,6 +26,8 @@ gem "twitter-bootstrap-rails"
 gem 'will_paginate-bootstrap'
 gem 'less-rails'
 gem "paperclip", "~> 4.1"
+gem 'aws-sdk', '< 2.0'
+gem "figaro"
 gem 'mailboxer'
 gem 'ckeditor'
 gem 'will_paginate'

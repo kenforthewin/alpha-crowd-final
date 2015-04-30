@@ -23,12 +23,20 @@ config.action_mailer.smtp_settings = {
   :port                 => 587,
   :domain               => "gmail.com",
   :user_name            => "bergquist.kenneth@gmail.com",
-  :password             => "Yw854252jj95595",
+  :password             => ENV['GMAIL_PASSWORD'],
   :authentication       => :plain,
   :enable_starttls_auto => true,
   tsl: true
 }
 
+  config.paperclip_defaults = {
+  :storage => :s3,
+  :s3_credentials => {
+    :bucket => ENV['S3_BUCKET_NAME'],
+    :access_key_id => ENV['AWS_ACCESS_KEY_ID'],
+    :secret_access_key => ENV['AWS_SECRET_ACCESS_KEY']
+  }
+}
   # Don't care if the mailer can't send.
   config.action_mailer.default_url_options = { :host => "localhost:3000" }
   # Print deprecation notices to the Rails logger.

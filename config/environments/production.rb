@@ -26,14 +26,23 @@ Rails.application.configure do
   config.assets.js_compressor = :uglifier
   # config.assets.css_compressor = :sass
 
-  # Do not fallback to assets pipeline if a precompiled asset is missed.
   config.assets.compile = true
+  # Do not fallback to assets pipeline if a precompiled asset is missed.
 
   # Generate digests for assets URLs.
   config.assets.digest = true
 
   # Version of your assets, change this if you want to expire all your assets.
   config.assets.version = '1.0'
+
+  config.paperclip_defaults = {
+  :storage => :s3,
+  :s3_credentials => {
+    :bucket => ENV['S3_BUCKET_NAME'],
+    :access_key_id => ENV['AWS_ACCESS_KEY_ID'],
+    :secret_access_key => ENV['AWS_SECRET_ACCESS_KEY']
+  }
+}
 
   # Specifies the header that your server uses for sending files.
   # config.action_dispatch.x_sendfile_header = "X-Sendfile" # for apache
@@ -64,7 +73,7 @@ config.action_mailer.smtp_settings = {
   :port                 => 587,
   :domain               => "gmail.com",
   :user_name            => "bergquist.kenneth@gmail.com",
-  :password             => "Yw854252jj95595",
+  :password             => ENV['GMAIL_PASSWORD'],
   :authentication       => :plain,
   :enable_starttls_auto => true,
   tsl: true
