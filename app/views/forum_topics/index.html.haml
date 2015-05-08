@@ -23,7 +23,7 @@
             %br
         .row
           .col-md-12
-            %table.table
+            %table.table{id: 'tablecloth'}
               %tr
                 %th Thread
                 %th Thread Starter
@@ -67,4 +67,6 @@
                     = thread.posts.count - 1 >= 0 ? thread.posts.count - 1 : 0
                   %td
                     = link_to 'Delete', delete_thread_path(thread), method: :delete, class: 'btn btn-danger'
+%script
+  $(".table").tablecloth();
 

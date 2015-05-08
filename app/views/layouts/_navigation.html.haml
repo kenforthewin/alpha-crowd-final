@@ -1,5 +1,5 @@
 %header.navbar
-  %nav.navbar.navbar-default.navbar-fixed-top
+  %nav.navbar.navbar-inverse.navbar-fixed-top
     .container
       .navbar-header
         %button.navbar-toggle{ :type => "button", :"data-toggle" => "collapse", :"data-target" => ".navbar-collapse" }
@@ -41,7 +41,10 @@
                 %input.form-control{:placeholder => "Search (coming soon)", :type => "text"}
               %button.btn.btn-default{:type => "submit"} Go
             %li
-              = link_to 'Messages', conversations_path(page: 1, box: 'index')
+              = link_to conversations_path(page: 1, box: 'index') do
+                Messages
+                - if current_user.unread_inbox_count != 0
+                  %span.badge.badge-primary= current_user.unread_inbox_count
             %li
               = link_to "Profile", user_profile_path(current_user.id)
             %li

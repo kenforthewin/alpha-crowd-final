@@ -15,4 +15,6 @@
 //= require twitter/bootstrap
 //= require ckeditor/init
 //= require turbolinks
+//= require jquery.tablecloth
+//= require jquery.tablesorter
 //= require_tree .

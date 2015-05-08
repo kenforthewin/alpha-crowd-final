@@ -12,7 +12,7 @@ Rails.application.routes.draw do
 
   devise_for :users
 
-  root 'topics#index'
+  root 'static_pages#home'
 
   resources :messages
   resources :conversations

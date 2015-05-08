@@ -14,6 +14,8 @@
  *= require_self
  *= require bootstrap_and_overrides
  *= require devise_bootstrap_views
+ *= require prettify
+ *= require tablecloth
  */
 
 html,
@@ -74,3 +76,12 @@ a.btn-primary:visited, a.btn-success:visited {
 }
 
 iframe { width: 1120px; height: 630px; }
+
+.home-text {
+line-height:30px;
+}
+
+.home-jumbotron {
+  margin-top:-20px;
+  background-image:'app/assets/images/UCF.jpg'
+}
