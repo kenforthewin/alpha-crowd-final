@@ -9,4 +9,7 @@ class StaticPagesController < ApplicationController
   	@home_jumbotron = true
   	@user = User.new
   end
+
+  def new_home
+  end
 end

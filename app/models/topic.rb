@@ -22,7 +22,6 @@ class Topic < ActiveRecord::Base
 	acts_as_votable
 	belongs_to :user
 	validates :title, :text_field, :user_id, :presence => :true
-	validates :title, :uniqueness => :true
 
 	self.per_page = 10
 end

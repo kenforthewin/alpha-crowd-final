@@ -46,6 +46,8 @@ Rails.application.routes.draw do
   delete 'delete_thread/:forum_topic_id', to: 'admin#delete_thread', as: :delete_thread
 
   get 'deathgrips', to: 'static_pages#deathgrips'
+
+  get 'new_home', to: 'static_pages#new_home'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

@@ -44,9 +44,9 @@ class User < ActiveRecord::Base
 	has_many :forum_topics
 	has_many :posts
 
-	# validates :first_name, :last_name, presence: true
+	validates :first_name, :last_name, presence: true
 
-  validates :handle, uniqueness: true
+  #validates :handle, uniqueness: true
 
   validates :email, format: {with: /(@knights.ucf.edu)+/, message: 'must have @knights.ucf.edu'}
 

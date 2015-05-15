@@ -29,7 +29,7 @@
                             %span.glyphicon.glyphicon-star
                             = topic.user.cached_weighted_score
                       -else
-                        %h5{style: 'color:blue'}
+                        %h5{style: 'color:black'}
                           = topic.user.f_status
                           %span.badge.badge-primary
                             %span.glyphicon.glyphicon-star
@@ -42,18 +42,18 @@
                       #{'-'} proposed by #{link_to topic.user.name, user_profile_path(topic.user)} on #{topic.created_at.strftime("%m/%d/%Y")}
                 .btn-group.btn-group-lg{:role => 'group'}
                   - btn_class = ''
-                  - current_user.voted_up_on?(topic) ? btn_class ='btn btn-success' : btn_class ='btn btn-default'
+                  - current_user.voted_up_on?(topic) ? btn_class ='btn btn-info' : btn_class ='btn btn-default'
                   = link_to upvote_path(topic.id), class: btn_class, role: 'button' do
                     %i.glyphicon.glyphicon-chevron-up
                   - current_user.voted_down_on?(topic) ? btn_class = 'btn btn-danger' : btn_class = 'btn btn-default'
                   = link_to downvote_path(topic.id), class: btn_class, role: 'button' do
                     %i.glyphicon.glyphicon-chevron-down
                 .btn-group.btn-group{:role => 'group'}
-                  = link_to show_forum_path(topic.forum), class: 'btn btn-info', role: 'button' do
+                  = link_to show_forum_path(topic.forum), class: 'btn btn-default', role: 'button' do
                     Forum
-                  %button.btn.btn-warning{type: 'button'} Report
+                  %button.btn.btn-default{type: 'button'} Report
                   - if current_user == topic.user
-                    %button.btn.btn-danger{type: 'button'} Request Deletion
+                    %button.btn.btn-default{type: 'button'} Request Deletion
                   - if current_user.admin?
                     = link_to 'Delete', delete_topic_path(topic), :confirm => 'Are you sure?', method: :delete, class: 'btn btn-danger'
 

@@ -6,43 +6,60 @@
     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
     = javascript_include_tag 'application', 'data-turbolinks-track' => true
     = csrf_meta_tags
-  %body
-    = render 'layouts/navigation'
+  %body{id: 'page-top'}
+    %header.navbar
+      - if @home_jumbotron
+        %nav.navbar.navbar-default{id: 'custom-bootstrap-menu'}
+          = render 'layouts/navigation'
+      - else
+        %nav.navbar.navbar-default.navbar-fixed-top{id: 'custom-bootstrap-menu'}
+          = render 'layouts/navigation'
     - if @home_jumbotron
       .jumbotron.home-jumbotron
-        .hompage-image{id: 'bg' }
-          = image_tag("UCF.jpg", id: 'homepage-image', alt: '')
         .container
           .row
             .col-md-8
-              %h1{style: 'color:white;text-shadow: black 0.3em 0.3em 0.3em;'} The UCF Crowd
-              %hr
-              .panel.panel-primary
-                .container
-                  %p{id: 'home-text'} Our goal is to allow students at UCF to feel connected and empowered by their student government. That's why we made this website: a place where the UCF student body can propose ideas for SGA, vote on others' ideas, and discuss them in forums. The goal is to use this platform to launch a campaign for the SGA presidency and have every decision along the way be made by YOU, the students. We can only do this with your help, so sign up today!
+              %h1
+                %b{style: 'color:black;text-shadow: white 0.3em 0.3em 0.3em;'} Take control of SGA.
+              %h4{id: 'home-text'}
+                %b Student government should be run by the students. The UCF Crowd aims to empower and give voice to every student at UCF by governing the SGA through a democratic process.
+                %br
+                %br
+                %button.btn.btn-primary.btn-lg Learn more
             .col-md-4
-              .well
-                %h2 Sign up
-                = simple_form_for(@user, url: user_registration_path, method: :post, :html => {:class => 'form-horizontal' }) do |f|
-                  .panel.panel-primary
-                    .panel-body
-                      .container
-                        = f.input :email, placeholder: 'must have @knights.ucf.edu'
-                        = f.input :first_name
-                        = f.input :last_name
-                        = f.input :avatar, label: 'Profile pic'
-                        = f.input :password
-                        = f.input :password_confirmation
+              %h2
+                %b Sign up
+              %br
+              = simple_form_for(@user, url: user_registration_path, method: :post, :html => {:class => 'form-horizontal' }) do |f|
+                .container
+                  = f.input :email, label: false, placeholder: 'Email (must have @knights.ucf.edu)'
+                  = f.input :first_name, label: false, placeholder: 'First name'
+                  = f.input :last_name, label: false, placeholder: 'Last name'
+                  = f.input :password, label: false, placeholder: 'Password'
+                  = f.input :password_confirmation, label: false, placeholder: 'Password confirmation'
+                  %br
                   = f.button :submit, 'Send Confirmation Email', class: 'btn btn-primary btn-lg'
-
+      .jumbotron.home-jumbotron2
+        .container
+          .row
+            .col-md-12
+              %h1
+                %b{style: 'color:white'} Empowering UCF students.
+          .row
+            .col-md-8
+              %h3{id: 'home-text2', style: 'color:white'}
+                By offering students a voice and a vote for every decision made by the SGA presidency, we at the Crowd aim to give the power to you, the students of UCF.
+                Here's how it works: any student with a knights.ucf.edu email can sign up and create an account. After verifying their email, students are able
+                to post ideas, vote on others' ideas and join in on the discussion through each post's corresponding forum. Student propositions that become sufficiently
+                popular and attain a net positive score will be implemented by our trustee in the SGA presidency. The only way we can make this a reality is with the overwhelming support of the student body. First we need to win the presidency, so sign up and start having a voice
+                in the campaign!
+    - if @thread_response or @forum_list or @forums_list
+      .jumbotron.home-jumbotron
+        .row
+          .col-md-12
+            %h1
+              Forums
     .container
-      - if @thread_response or @forum_list or @forums_list
-        .page-header
-          .text-center
-            %h1{style: 'color:black'}
-              = link_to list_forums_path do
-                %small (forums)
-                UCF
       - if notice
         %p.alert.alert-success= notice
       - if alert
