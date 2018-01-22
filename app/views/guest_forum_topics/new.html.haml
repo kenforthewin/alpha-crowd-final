@@ -1,0 +1,16 @@
+.row
+  .col-md-12
+    .panel.panel-primary
+      .panel-heading
+        %h1.panel-title
+          New thread in:
+          = truncate(@guest_forum.name)
+      .panel-body
+        .well
+          .row
+            .col-md-12
+              = simple_form_for :thread, url: guest_forum_topics_path, method: :post, :html => { :class => 'form-horizontal' } do |f|
+                = f.input :guest_forum_id, :as => :hidden, :input_html => { :value => @guest_forum.id }
+                = f.input :name
+                = f.input :post, as: :ckeditor
+                = f.button :submit, :class => 'btn-primary'

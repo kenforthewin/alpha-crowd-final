@@ -10,6 +10,8 @@ Rails.application.routes.draw do
 
   resources :topics
 
+  resources :institutions
+
   devise_for :users
 
   root 'static_pages#home'
@@ -25,8 +27,16 @@ Rails.application.routes.draw do
   get 'topic_upvote/:id', to: 'topics#upvote', as: :upvote
   get 'topic_downvote/:id', to: 'topics#downvote', as: :downvote
 
+  get 'guest_topic_upvote/:id', to: 'guest_topics#upvote', as: :guest_upvote
+  get 'guest_topic_downvote/:id', to: 'guest_topics#downvote', as: :guest_downvote
+
+
   get 'post_upvote/:id', to: 'posts#upvote', as: :post_upvote
   get 'post_downvote/:id', to: 'posts#downvote', as: :post_downvote
+
+  get 'guest_post_upvote/:id', to: 'guest_posts#upvote', as: :guest_post_upvote
+  get 'guest_post_downvote/:id', to: 'guest_posts#downvote', as: :guest_post_downvote
+
 
   post 'upvote/', to: 'topics#upvote', as: :modal_upvote
   post 'downvote/', to: 'topics#downvote', as: :modal_downvote
@@ -35,9 +45,13 @@ Rails.application.routes.draw do
 
   get 'show_forum/:forum_id', to: 'forum_topics#index', as: :show_forum
 
+  get 'show_guest_forum/:guest_forum_id', to: 'guest_forum_topics#index', as: :show_guest_forum
+
   get 'manage_users', to: 'admin#manage_users', as: :manage_users
 
   delete 'delete_post/:post_id', to: 'admin#delete_post', as: :delete_post
+
+  delete 'delete_guest_post/:guest_post_id', to: 'admin#delete_guest_post', as: :delete_guest_post
 
   get 'list_forums', to: 'forums#index', as: :list_forums
 
@@ -48,6 +62,15 @@ Rails.application.routes.draw do
   get 'deathgrips', to: 'static_pages#deathgrips'
 
   get 'new_home', to: 'static_pages#new_home'
+
+  resources :guest_forum_topics
+
+  resources :guest_posts
+
+  get 'guest_thread/:guest_forum_topic_id', to: 'guest_posts#index', as: :guest_thread
+
+
+  delete 'delete_thread/:guest_forum_topic_id', to: 'admin#delete_guest_thread', as: :delete_guest_thread
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

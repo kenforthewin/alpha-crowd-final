@@ -65,8 +65,9 @@
 
                   %td
                     = thread.posts.count - 1 >= 0 ? thread.posts.count - 1 : 0
-                  %td
-                    = link_to 'Delete', delete_thread_path(thread), method: :delete, class: 'btn btn-danger'
+                  - if current_user.admin?
+                    %td
+                      = link_to 'Delete', delete_thread_path(thread), method: :delete, class: 'btn btn-danger'
 %script
   $(".table").tablecloth();
 

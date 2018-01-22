@@ -2,5 +2,5 @@
   = f.input :title
   = error_span(@topic[:title])
   = f.input :text_field, as: :ckeditor
-  = error_span(@topic[:text_field])
+  - #= error_span(@topic[:text_field])
   = f.button :submit, :class => 'btn-primary'

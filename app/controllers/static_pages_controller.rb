@@ -8,6 +8,7 @@ class StaticPagesController < ApplicationController
   	end
   	@home_jumbotron = true
   	@user = User.new
+    guest_topic
   end
 
   def new_home

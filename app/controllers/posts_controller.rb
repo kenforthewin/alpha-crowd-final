@@ -4,6 +4,7 @@ class PostsController < ApplicationController
 
   respond_to :html
 
+
   def index
     @thread = ForumTopic.find_by_id(params[:forum_topic_id])
     @forum = @thread.forum

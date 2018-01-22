@@ -14,10 +14,18 @@
 # #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 # #   Mayor.create(name: 'Emanuel', city: cities.first)
 
-forum = Forum.new
-forum.name = 'General'
-forum.description = 'general discussion'
-forum.save!
+# forum = Forum.new
+# forum.name = 'General'
+# forum.description = 'general discussion'
+# forum.save!
+
+guest_topic = GuestTopic.new
+guest_topic.title = 'Try it out!'
+guest_topic.user_id = 1
+guest_topic.text_field = 'UCF needs better tools to find and sign up for classes, including a new web app and a mobile app. I think we should allocate resources to a professional redesign of course registration. Vote below or click "forum" to voice your opinion about this idea.'
+guest_topic.save!
+
+
 
 # topic1 = Topic.new
 # topic1.title = 'Free Lunch'

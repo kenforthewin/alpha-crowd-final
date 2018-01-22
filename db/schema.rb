@@ -11,12 +11,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150427184653) do
+ActiveRecord::Schema.define(version: 20151227230949) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "ckeditor_assets", force: true do |t|
+  create_table "ckeditor_assets", force: :cascade do |t|
     t.string   "data_file_name",               null: false
     t.string   "data_content_type"
     t.integer  "data_file_size"
@@ -32,7 +32,7 @@ ActiveRecord::Schema.define(version: 20150427184653) do
   add_index "ckeditor_assets", ["assetable_type", "assetable_id"], name: "idx_ckeditor_assetable", using: :btree
   add_index "ckeditor_assets", ["assetable_type", "type", "assetable_id"], name: "idx_ckeditor_assetable_type", using: :btree
 
-  create_table "forum_topics", force: true do |t|
+  create_table "forum_topics", force: :cascade do |t|
     t.integer  "forum_id"
     t.string   "name"
     t.integer  "user_id"
@@ -41,7 +41,7 @@ ActiveRecord::Schema.define(version: 20150427184653) do
     t.boolean  "sticky"
   end
 
-  create_table "forums", force: true do |t|
+  create_table "forums", force: :cascade do |t|
     t.string   "name"
     t.text     "description"
     t.datetime "created_at"
@@ -50,7 +50,89 @@ ActiveRecord::Schema.define(version: 20150427184653) do
     t.boolean  "sticky"
   end
 
-  create_table "mailboxer_conversation_opt_outs", force: true do |t|
+  create_table "guest_forum_topics", force: :cascade do |t|
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "guest_forum_id"
+    t.string   "name"
+    t.integer  "guest_user_id"
+    t.boolean  "sticky"
+  end
+
+  create_table "guest_forums", force: :cascade do |t|
+    t.string   "name"
+    t.text     "description"
+    t.integer  "guest_topic_id"
+    t.boolean  "sticky"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "guest_posts", force: :cascade do |t|
+    t.text     "text"
+    t.string   "guest_user_id"
+    t.integer  "guest_forum_topic_id"
+    t.integer  "guest_forum_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "cached_votes_total",      default: 0
+    t.integer  "cached_votes_score",      default: 0
+    t.integer  "cached_votes_up",         default: 0
+    t.integer  "cached_votes_down",       default: 0
+    t.integer  "cached_weighted_score",   default: 0
+    t.integer  "cached_weighted_total",   default: 0
+    t.float    "cached_weighted_average", default: 0.0
+  end
+
+  add_index "guest_posts", ["cached_votes_down"], name: "index_guest_posts_on_cached_votes_down", using: :btree
+  add_index "guest_posts", ["cached_votes_score"], name: "index_guest_posts_on_cached_votes_score", using: :btree
+  add_index "guest_posts", ["cached_votes_total"], name: "index_guest_posts_on_cached_votes_total", using: :btree
+  add_index "guest_posts", ["cached_votes_up"], name: "index_guest_posts_on_cached_votes_up", using: :btree
+  add_index "guest_posts", ["cached_weighted_average"], name: "index_guest_posts_on_cached_weighted_average", using: :btree
+  add_index "guest_posts", ["cached_weighted_score"], name: "index_guest_posts_on_cached_weighted_score", using: :btree
+  add_index "guest_posts", ["cached_weighted_total"], name: "index_guest_posts_on_cached_weighted_total", using: :btree
+
+  create_table "guest_topics", force: :cascade do |t|
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "title"
+    t.text     "text_field"
+    t.integer  "user_id"
+    t.integer  "cached_votes_total",      default: 0
+    t.integer  "cached_votes_score",      default: 0
+    t.integer  "cached_votes_up",         default: 0
+    t.integer  "cached_votes_down",       default: 0
+    t.integer  "cached_weighted_score",   default: 0
+    t.integer  "cached_weighted_total",   default: 0
+    t.float    "cached_weighted_average", default: 0.0
+  end
+
+  add_index "guest_topics", ["cached_votes_down"], name: "index_guest_topics_on_cached_votes_down", using: :btree
+  add_index "guest_topics", ["cached_votes_score"], name: "index_guest_topics_on_cached_votes_score", using: :btree
+  add_index "guest_topics", ["cached_votes_total"], name: "index_guest_topics_on_cached_votes_total", using: :btree
+  add_index "guest_topics", ["cached_votes_up"], name: "index_guest_topics_on_cached_votes_up", using: :btree
+  add_index "guest_topics", ["cached_weighted_average"], name: "index_guest_topics_on_cached_weighted_average", using: :btree
+  add_index "guest_topics", ["cached_weighted_score"], name: "index_guest_topics_on_cached_weighted_score", using: :btree
+  add_index "guest_topics", ["cached_weighted_total"], name: "index_guest_topics_on_cached_weighted_total", using: :btree
+
+  create_table "guest_users", force: :cascade do |t|
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "identifier"
+    t.string   "avatar_file_name"
+    t.string   "avatar_content_type"
+    t.integer  "avatar_file_size"
+    t.datetime "avatar_updated_at"
+  end
+
+  create_table "institutions", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "subdomain"
+  end
+
+  create_table "mailboxer_conversation_opt_outs", force: :cascade do |t|
     t.integer "unsubscriber_id"
     t.string  "unsubscriber_type"
     t.integer "conversation_id"
@@ -59,13 +141,13 @@ ActiveRecord::Schema.define(version: 20150427184653) do
   add_index "mailboxer_conversation_opt_outs", ["conversation_id"], name: "index_mailboxer_conversation_opt_outs_on_conversation_id", using: :btree
   add_index "mailboxer_conversation_opt_outs", ["unsubscriber_id", "unsubscriber_type"], name: "index_mailboxer_conversation_opt_outs_on_unsubscriber_id_type", using: :btree
 
-  create_table "mailboxer_conversations", force: true do |t|
+  create_table "mailboxer_conversations", force: :cascade do |t|
     t.string   "subject",    default: ""
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
   end
 
-  create_table "mailboxer_notifications", force: true do |t|
+  create_table "mailboxer_notifications", force: :cascade do |t|
     t.string   "type"
     t.text     "body"
     t.string   "subject",              default: ""
@@ -88,7 +170,7 @@ ActiveRecord::Schema.define(version: 20150427184653) do
   add_index "mailboxer_notifications", ["sender_id", "sender_type"], name: "index_mailboxer_notifications_on_sender_id_and_sender_type", using: :btree
   add_index "mailboxer_notifications", ["type"], name: "index_mailboxer_notifications_on_type", using: :btree
 
-  create_table "mailboxer_receipts", force: true do |t|
+  create_table "mailboxer_receipts", force: :cascade do |t|
     t.integer  "receiver_id"
     t.string   "receiver_type"
     t.integer  "notification_id",                            null: false
@@ -103,7 +185,7 @@ ActiveRecord::Schema.define(version: 20150427184653) do
   add_index "mailboxer_receipts", ["notification_id"], name: "index_mailboxer_receipts_on_notification_id", using: :btree
   add_index "mailboxer_receipts", ["receiver_id", "receiver_type"], name: "index_mailboxer_receipts_on_receiver_id_and_receiver_type", using: :btree
 
-  create_table "posts", force: true do |t|
+  create_table "posts", force: :cascade do |t|
     t.text     "text"
     t.integer  "user_id"
     t.datetime "created_at"
@@ -127,7 +209,7 @@ ActiveRecord::Schema.define(version: 20150427184653) do
   add_index "posts", ["cached_weighted_score"], name: "index_posts_on_cached_weighted_score", using: :btree
   add_index "posts", ["cached_weighted_total"], name: "index_posts_on_cached_weighted_total", using: :btree
 
-  create_table "topics", force: true do |t|
+  create_table "topics", force: :cascade do |t|
     t.string   "title"
     t.text     "text_field"
     t.integer  "user_id"
@@ -150,7 +232,7 @@ ActiveRecord::Schema.define(version: 20150427184653) do
   add_index "topics", ["cached_weighted_score"], name: "index_topics_on_cached_weighted_score", using: :btree
   add_index "topics", ["cached_weighted_total"], name: "index_topics_on_cached_weighted_total", using: :btree
 
-  create_table "users", force: true do |t|
+  create_table "users", force: :cascade do |t|
     t.string   "email",                   default: "",  null: false
     t.string   "encrypted_password",      default: "",  null: false
     t.string   "reset_password_token"
@@ -184,6 +266,7 @@ ActiveRecord::Schema.define(version: 20150427184653) do
     t.integer  "cached_weighted_score",   default: 0
     t.integer  "cached_weighted_total",   default: 0
     t.float    "cached_weighted_average", default: 0.0
+    t.integer  "institution_id"
   end
 
   add_index "users", ["cached_votes_down"], name: "index_users_on_cached_votes_down", using: :btree
@@ -196,7 +279,7 @@ ActiveRecord::Schema.define(version: 20150427184653) do
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
-  create_table "votes", force: true do |t|
+  create_table "votes", force: :cascade do |t|
     t.integer  "votable_id"
     t.string   "votable_type"
     t.integer  "voter_id"
@@ -211,10 +294,7 @@ ActiveRecord::Schema.define(version: 20150427184653) do
   add_index "votes", ["votable_id", "votable_type", "vote_scope"], name: "index_votes_on_votable_id_and_votable_type_and_vote_scope", using: :btree
   add_index "votes", ["voter_id", "voter_type", "vote_scope"], name: "index_votes_on_voter_id_and_voter_type_and_vote_scope", using: :btree
 
-  add_foreign_key "mailboxer_conversation_opt_outs", "mailboxer_conversations", name: "mb_opt_outs_on_conversations_id", column: "conversation_id"
-
-  add_foreign_key "mailboxer_notifications", "mailboxer_conversations", name: "notifications_on_conversation_id", column: "conversation_id"
-
-  add_foreign_key "mailboxer_receipts", "mailboxer_notifications", name: "receipts_on_notification_id", column: "notification_id"
-
+  add_foreign_key "mailboxer_conversation_opt_outs", "mailboxer_conversations", column: "conversation_id", name: "mb_opt_outs_on_conversations_id"
+  add_foreign_key "mailboxer_notifications", "mailboxer_conversations", column: "conversation_id", name: "notifications_on_conversation_id"
+  add_foreign_key "mailboxer_receipts", "mailboxer_notifications", column: "notification_id", name: "receipts_on_notification_id"
 end

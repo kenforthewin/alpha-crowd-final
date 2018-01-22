@@ -1,0 +1,46 @@
+.panel.panel-primary
+  .panel-heading
+    .text-left
+      %span.badge.badge-primary
+        #{@guest_topic.cached_weighted_score}
+      #{@guest_topic.title}
+  .panel-body
+    .row
+      .col-md-2
+        = link_to image_tag(@guest_topic.user.avatar.url(:thumb),
+                               :title => @guest_topic.user.full_name,
+                               :alt => @guest_topic.user.full_name,
+                               :class => 'img-rounded'),
+                      user_profile_path(@guest_topic.user.id)
+        .row
+          .col-md-8.col-md-offset-2
+            .text-center
+              -if @guest_topic.user.admin?
+                %h5{style: 'color:red'}
+                  = @guest_topic.user.f_status
+                  %span.badge.badge-primary
+                    %span.glyphicon.glyphicon-star
+                    = @guest_topic.user.cached_weighted_score
+              -else
+                %h5{style: 'color:black'}
+                  = @guest_topic.user.f_status
+                  %span.badge.badge-primary
+                    %span.glyphicon.glyphicon-star
+                    = @guest_topic.user.cached_weighted_score
+      .col-md-10
+        .well
+          = @guest_topic.text_field.html_safe
+          .text-right
+            %h5
+              #{'-'} #{link_to @guest_topic.user.name, user_profile_path(@guest_topic.user)} - #{@guest_topic.created_at.strftime("%m/%d/%Y")}
+        .btn-group.btn-group-lg{:role => 'group'}
+          - btn_class = ''
+          - current_guest_user.voted_up_on?(@guest_topic) ? btn_class ='btn btn-primary' : btn_class ='btn btn-default'
+          = link_to guest_upvote_path(@guest_topic.id), class: btn_class, role: 'button' do
+            %i.glyphicon.glyphicon-chevron-up
+          - current_guest_user.voted_down_on?(@guest_topic) ? btn_class = 'btn btn-primary' : btn_class = 'btn btn-default'
+          = link_to guest_downvote_path(@guest_topic.id), class: btn_class, role: 'button' do
+            %i.glyphicon.glyphicon-chevron-down
+        .btn-group.btn-group{:role => 'group'}
+          = link_to show_guest_forum_path(@guest_topic.guest_forum), class: 'btn btn-default', role: 'button' do
+            Forum

@@ -24,4 +24,30 @@ class Topic < ActiveRecord::Base
 	validates :title, :text_field, :user_id, :presence => :true
 
 	self.per_page = 10
+
+	after_save :create_forum
+
+	private
+
+	def create_forum
+		forum = Forum.new
+		forum.name = self.title
+		forum.description = self.text_field
+		forum.topic_id = self.id
+		forum.save
+
+		pro_thread = ForumTopic.new
+		pro_thread.user = self.user
+		pro_thread.sticky = true
+		pro_thread.forum = forum
+		pro_thread.name = 'Pros'
+		pro_thread.save
+
+		con_thread = ForumTopic.new
+		con_thread.user = self.user
+		con_thread.sticky = true
+		con_thread.forum = forum
+		con_thread.name = "Cons"
+		con_thread.save
+	end
 end

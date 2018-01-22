@@ -20,7 +20,7 @@
 html,
 body {
   height: 100%;
-  background-color: #C0C0C0;
+    background-image: url('concrete_seamless.png');
   /* The html and body elements cannot have any padding or margin. */
 }
 /* Wrapper for page content to push down footer */
@@ -83,3 +83,10 @@ line-height:30px;
 #ucf-logo {
     font-size: 2.3em;
  }
+
+.jumbotron-trans {
+    background: rgb(200, 54, 54); /* This is for ie8 and below */
+    background: rgba(200, 54, 54, 0.0);
+    margin-top:-67px;
+    height:180px;
+}

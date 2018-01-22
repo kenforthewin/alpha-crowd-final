@@ -2,9 +2,9 @@ source 'https://rubygems.org'
 
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.1.1'
+gem 'rails', '4.2.10'
 # Use sqlite3 as the database for Active Record
-gem 'pg'
+gem 'pg', "~> 0.21.0"
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.3'
 # Use Uglifier as compressor for JavaScript assets
@@ -21,10 +21,10 @@ gem 'devise-bootstrap-views'
 gem 'acts_as_votable'
 gem 'kaminari'
 gem 'bootstrap-kaminari-views'
-gem 'devise'
-gem "twitter-bootstrap-rails"
+gem 'devise', "~> 3"
+gem "twitter-bootstrap-rails", "~> 3.2.2"
 gem 'will_paginate-bootstrap'
-gem 'less-rails'
+gem "less-rails", "~> 2.8.0"
 gem "paperclip", "~> 4.1"
 gem 'aws-sdk', '< 2.0'
 gem "figaro"
@@ -42,8 +42,9 @@ gem 'jbuilder', '~> 2.0'
 gem 'sdoc', '~> 0.4.0',          group: :doc
 
 # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
-gem 'spring',        group: :development
 gem "letter_opener", :group => :development
+
+gem 'acts_as_tenant'
 
 
 # Use ActiveModel has_secure_password

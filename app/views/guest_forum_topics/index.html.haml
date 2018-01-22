@@ -1,0 +1,66 @@
+.row
+  .col-md-12
+    .panel.panel-primary
+      .panel-heading
+        %h1.panel-title
+          = @guest_forum.name
+      .panel-body
+        .row
+          .col-md-6
+            = link_to 'New Thread', new_guest_forum_topic_path(guest_forum_id: @guest_forum.id), class: 'btn btn-primary'
+          .col-md-6
+            .text-right
+              = will_paginate @nonsticky_threads, renderer: BootstrapPagination::Rails
+        .row
+          .col-md-12
+            %br
+        .row
+          .col-md-12
+            %table.table{id: 'tablecloth'}
+              %tr
+                %th Thread
+                %th Thread Starter
+                %th Last Post
+                %th Replies
+              - @sticky_threads.each do |thread|
+                %tr
+                  %td{style: 'width:750px'}
+                    %b STICKY:
+                    = link_to thread.name, guest_thread_path(thread)
+                  %td
+                    Guest
+                  %td
+                    - if !thread.guest_posts.last.nil?
+                      = time_ago_in_words(thread.guest_posts.last.created_at)
+                      ago by
+                      Guest
+                    - else
+                      = time_ago_in_words(thread.created_at)
+                      ago by
+                      Guest
+                    %td
+                      = thread.guest_posts.count - 1 >= 0 ? thread.guest_posts.count - 1 : 0
+              - @nonsticky_threads.each do |thread|
+                %tr
+                  %td{style: 'width:750px'}
+                    = link_to thread.name, guest_thread_path(thread)
+                  %td
+                    Guest
+                  %td
+                    - if !thread.guest_posts.last.nil?
+                      = time_ago_in_words(thread.guest_posts.last.created_at)
+                      ago by
+                      Guest
+                    - else
+                      = time_ago_in_words(thread.created_at)
+                      ago by
+                      Guest
+
+                  %td
+                    = thread.guest_posts.count - 1 >= 0 ? thread.guest_posts.count - 1 : 0
+                  - if user_signed_in? and current_user.admin?
+                    %td
+                      = link_to 'Delete', delete_guest_thread_path(thread), method: :delete, class: 'btn btn-danger'
+%script
+  $(".table").tablecloth();
+

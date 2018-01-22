@@ -1,5 +1,6 @@
 class ForumsController < ApplicationController
   respond_to :html
+  before_action :authenticate_user!, only: [:create]
 
   def index
     @stickies = Forum.sticky_forums

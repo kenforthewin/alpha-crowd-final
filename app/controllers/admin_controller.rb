@@ -10,6 +10,15 @@ class AdminController < ApplicationController
 		redirect_to thread_path(@thread)
 	end
 
+	def delete_guest_post
+		@guest_post = GuestPost.find_by_id(params[:guest_post_id])
+		@thread = @guest_post.guest_forum_topic
+		@guest_post.text = '<b style="color:red">--- DELETED ON ' + DateTime.current.strftime("%B %d %Y").upcase + ' BY ' + current_user.name.upcase + ' ---</b>'
+		@guest_post.save
+		flash[:notice] = 'Post deleted'
+		redirect_to guest_thread_path(@thread)
+	end
+
 	def delete_topic
 		@topic = Topic.find_by_id(params[:topic_id])
 		@forum = @topic.forum
@@ -42,6 +51,21 @@ class AdminController < ApplicationController
 		flash[:notice] = 'Thread deleted'
 		redirect_to show_forum_path(@forum)
 
+	end
+
+	def delete_guest_thread
+		@thread = GuestForumTopic.find_by_id(params[:guest_forum_topic_id])
+		@guest_forum = @thread.guest_forum
+
+		if !@thread.guest_posts.nil?
+			@thread.guest_posts.each do |post|
+				post.destroy
+			end
+		end
+
+		@thread.destroy
+		flash[:notice] = 'Thread deleted'
+		redirect_to root_path
 	end
 
 	def ban_user

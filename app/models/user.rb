@@ -13,6 +13,10 @@
 #  last_sign_in_at         :datetime
 #  current_sign_in_ip      :inet
 #  last_sign_in_ip         :inet
+#  confirmation_token      :string(255)
+#  confirmed_at            :datetime
+#  confirmation_sent_at    :datetime
+#  unconfirmed_email       :string(255)
 #  created_at              :datetime
 #  updated_at              :datetime
 #  handle                  :string(255)
@@ -32,6 +36,7 @@
 #  cached_weighted_score   :integer          default(0)
 #  cached_weighted_total   :integer          default(0)
 #  cached_weighted_average :float            default(0.0)
+#  institution_id          :integer
 #
 
 class User < ActiveRecord::Base
@@ -44,7 +49,7 @@ class User < ActiveRecord::Base
 	has_many :forum_topics
 	has_many :posts
 
-	validates :first_name, :last_name, presence: true
+	validates :first_name, :last_name, :institution_id, presence: true
 
   #validates :handle, uniqueness: true
 
@@ -56,7 +61,7 @@ class User < ActiveRecord::Base
   acts_as_messageable
   acts_as_voter
   acts_as_votable
-
+  acts_as_tenant(:institution)
   def full_name
   	first_name + " " + last_name
   end

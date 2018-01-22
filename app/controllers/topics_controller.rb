@@ -41,27 +41,7 @@ class TopicsController < ApplicationController
     @topic.save
     @topic.vote_by :voter => current_user, vote: 'like'
 
-    forum = Forum.new
-    forum.name = @topic.title
-    forum.description = @topic.text_field
-    forum.topic_id = @topic.id
-    forum.save
-
-    pro_thread = ForumTopic.new
-    pro_thread.user = current_user
-    pro_thread.sticky = true
-    pro_thread.forum = forum
-    pro_thread.name = 'Pros'
-    pro_thread.save
-
-    con_thread = ForumTopic.new
-    con_thread.user = current_user
-    con_thread.sticky = true
-    con_thread.forum = forum
-    con_thread.name = "Cons"
-    con_thread.save
-
-    redirect_to show_forum_path(forum)
+    redirect_to show_forum_path(@topic.forum)
   end
 
   private

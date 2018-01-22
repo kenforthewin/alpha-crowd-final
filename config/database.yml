@@ -2,7 +2,7 @@ development:
   adapter: postgresql
   encoding: unicode
   database: alpha_crowd_dev
-  host: localhost
+  host: db
   pool: 5
   username: postgres
   password: postgres
@@ -11,7 +11,7 @@ test:
   adapter: postgresql
   encoding: unicode
   database: alpha_crowd_test
-  host: localhost
+  host: db
   pool: 5
   username: postgres
   password: postgres

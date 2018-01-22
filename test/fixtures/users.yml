@@ -13,6 +13,10 @@
 #  last_sign_in_at         :datetime
 #  current_sign_in_ip      :inet
 #  last_sign_in_ip         :inet
+#  confirmation_token      :string(255)
+#  confirmed_at            :datetime
+#  confirmation_sent_at    :datetime
+#  unconfirmed_email       :string(255)
 #  created_at              :datetime
 #  updated_at              :datetime
 #  handle                  :string(255)
@@ -32,6 +36,7 @@
 #  cached_weighted_score   :integer          default(0)
 #  cached_weighted_total   :integer          default(0)
 #  cached_weighted_average :float            default(0.0)
+#  institution_id          :integer
 #
 
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html

@@ -1,0 +1,21 @@
+version: '3'
+services:
+  app:
+    build: .
+    ports:
+      - 3000:3000
+    links:
+      - db
+    volumes:
+      - $PWD:/var/www/app
+    depends_on:
+      - db
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - acf:/var/lib/postgresql/data
+volumes:
+  acf:

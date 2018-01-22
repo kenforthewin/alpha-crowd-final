@@ -20,7 +20,7 @@
           .row
             .col-md-8
               %h1
-                %b{style: 'color:black;text-shadow: white 0.3em 0.3em 0.3em;'} Take control of SGA.
+                %b{style: 'color:black;text-shadow: white 0.3em 0.3em 0.3em'} Take control of SGA.
               %h4{id: 'home-text'}
                 %b Student government should be run by the students. The UCF Crowd aims to empower and give voice to every student at UCF by governing the SGA through a democratic process.
                 %br
@@ -39,26 +39,49 @@
                   = f.input :password_confirmation, label: false, placeholder: 'Password confirmation'
                   %br
                   = f.button :submit, 'Send Confirmation Email', class: 'btn btn-primary btn-lg'
-      .jumbotron.home-jumbotron2
+      .home-jumbotron2
         .container
-          .row
+          .row{style: 'margin-top:35px;'}
             .col-md-12
               %h1
-                %b{style: 'color:white'} Empowering UCF students.
+                %b{style: 'color:white;text-shadow: black 0.3em 0.3em 0.3em;'} Empowering UCF students.
           .row
             .col-md-8
-              %h3{id: 'home-text2', style: 'color:white'}
-                By offering students a voice and a vote for every decision made by the SGA presidency, we at the Crowd aim to give the power to you, the students of UCF.
-                Here's how it works: any student with a knights.ucf.edu email can sign up and create an account. After verifying their email, students are able
-                to post ideas, vote on others' ideas and join in on the discussion through each post's corresponding forum. Student propositions that become sufficiently
-                popular and attain a net positive score will be implemented by our trustee in the SGA presidency. The only way we can make this a reality is with the overwhelming support of the student body. First we need to win the presidency, so sign up and start having a voice
-                in the campaign!
+              %p
+                %h3{id: 'home-text2', style: 'color:white'}
+                  By offering students a voice and a vote for every decision made by the SGA presidency, we at the Crowd aim to give the power to you, the students of UCF.
+                  Here's how it works:
+                  any student with a knights.ucf.edu email can sign up and create an account. After verifying their email, students are able
+                  to post ideas, vote on others' ideas and join in on the discussion through each post's corresponding forum. Student propositions that become sufficiently
+                  popular and attain a net positive score will be implemented by our trustee in the SGA presidency.
+                  The only way we can make this a reality is with the overwhelming support of the student body. First we need to win the presidency, so sign up and start having a voice
+                  in the campaign!
+          .row{style: 'margin-top:25px;margin-left:20px;'}
+            .col-md-4
+              %button.btn.btn-default.btn-lg
+                %b Try it out
+      .container{style: 'height:745px;'}
+        .row
+          .col-md-12
+            .text-center
+              %h1{style: 'margin-top:35px'}
+                %b Try it out!
+        .row
+          .col-md-12
+            %h3{style: 'line-height:40px;'}
+              %b This is an example of the interface that students will be able to access through the crowd. Try voting this idea up or down and participating in the forum!
+        .row
+          .col-md-12
+            = render 'guest_topic'
+        %hr{style: 'color:black'}
     - if @thread_response or @forum_list or @forums_list
-      .jumbotron.home-jumbotron
+      .jumbotron.jumbotron-trans
         .row
           .col-md-12
             %h1
-              Forums
+              .text-center
+                %b
+                  %i.fa.fa-university.fa-2x
     .container
       - if notice
         %p.alert.alert-success= notice
